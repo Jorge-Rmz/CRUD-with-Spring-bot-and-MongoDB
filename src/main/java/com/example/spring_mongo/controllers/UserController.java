@@ -3,11 +3,13 @@ package com.example.spring_mongo.controllers;
 
 import com.example.spring_mongo.models.User;
 import com.example.spring_mongo.services.UserService;
+import com.example.spring_mongo.tdo.GeneralResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -19,17 +21,27 @@ public class UserController {
     }
 
     @GetMapping("/all/user")
-    public ResponseEntity<List<User>> getUser(){
+    public ResponseEntity<GeneralResponse> getUser(){
         return userService.getAllUser();
     }
 
+    @GetMapping("/find/{id}/user")
+    public ResponseEntity<GeneralResponse> findById(@PathVariable String id){
+        return userService.getById(id);
+    }
+
     @PostMapping("/newUser")
-    public ResponseEntity<?> postUser(@RequestBody User user){
+    public ResponseEntity<GeneralResponse> postUser(@Valid @RequestBody User user){
         return userService.createUser(user);
     }
 
     @PutMapping("/update/{id}/user")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user){
+    public ResponseEntity<GeneralResponse> updateUser(@PathVariable String id, @Valid @RequestBody User user){
         return userService.updateUser(id,user);
+    }
+
+    @DeleteMapping("/delete/{id}/user")
+    public ResponseEntity<GeneralResponse> deleteUser(@PathVariable String id){
+        return userService.deleteUser(id);
     }
 }
